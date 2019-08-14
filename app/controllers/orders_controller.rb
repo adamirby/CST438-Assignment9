@@ -60,7 +60,7 @@ class OrdersController < ApplicationController
                 @id = @customer[:id]
             end
         end
-        @orders = Order.where(customerID: @id)
+        @orders = Order.where(customerId: @id)
         render json: @orders, status:200
     end
     
