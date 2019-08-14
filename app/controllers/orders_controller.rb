@@ -22,20 +22,15 @@ class OrdersController < ApplicationController
             return
         end
         
-        #logic for disallowing an order if the item isn't in stock
-        if @item[:stockQty] <= 0
-            render json: {error: "Item is not available to order"}, status: 400
-            return
-        end
-        
         #initializing a new order item as a hybrid of values
         #from customer and item.
         @order.itemId = params[:itemId]
-        @order.description = item[:description]
-        @order.customerID = customer[:id]
-        @order.price = item[:price]
-        @order.award = customer[:award]
-        @order.total = @order.price - @order.award
+        @order.description = @item[:description]
+        @order.customerId = @customer[:id]
+        @order.price = @item[:price]
+        @order.award = @customer[:award]
+        @order.total = @order.price
+        @order.total = @order.total - @order.award
         
         if @order.save
             Item.order(@order)

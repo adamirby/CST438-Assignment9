@@ -51,5 +51,17 @@ RSpec.describe OrdersController, type: :request do
   it 'Create Order' do
     headers = {"CONTENT_TYPE" => "application/json",
                "ACCEPT" => "application/json"}
+               
+    expect(Item).to receive(:getById).with(1) do 
+      [200, { :id => 1, :description => 'Hat', :price => 666.00, :stockQty => 2}]
+    end
+    
+    expect(Customer).to receive(:getByEmail).with('bob@dole.com') do
+      [200, { :id => 1, :award => 0}]
+    end
+    
+    
+    post '/orders', :params => {email: 'bob@dole.com', itemId: 1}.to_json, :headers => headers
+    expect(response).to have_http_status(201)
   end
 end
